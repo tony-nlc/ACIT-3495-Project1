@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    // TEMPORARY: simulate JWT response
-    const fakeToken = "fake-jwt-token";
+  try {
+    const token = await login(username, password);
 
-    localStorage.setItem("token", fakeToken);
+    localStorage.setItem("token", token);
 
     navigate("/upload");
-  };
+  } catch (error) {
+    alert("Login failed");
+  }
+};
 
   return (
     <div>
