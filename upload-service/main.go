@@ -28,12 +28,34 @@ func main() {
 		}
 
 		// Proceed to File Service and MySQL...
-		file, header, _ := c.FormFile("video")
-		body := &bytes.Buffer{}
-		writer := multipart.NewWriter(body)
-		part, _ := writer.CreateFormFile("video", header.Filename)
-		io.Copy(part, file)
-		writer.Close()
+		header, err := c.FormFile("video")
+        if err != nil {
+            c.JSON(400, gin.H{"error": "No video file found in request"})
+            return
+        }
+
+        // 2. You MUST open the header to get the actual file data
+        file, err := header.Open()
+        if err != nil {
+            c.JSON(500, gin.H{"error": "Failed to open video file"})
+            return
+        }
+        defer file.Close() // Good practice to close it when the function finishes
+
+        // 3. Prepare to pass it to the File Service
+        body := &bytes.Buffer{}
+        writer := multipart.NewWriter(body)
+        
+        // Use header.Filename here (it's now a valid string field)
+        part, err := writer.CreateFormFile("video", header.Filename)
+        if err != nil {
+            c.JSON(500, gin.H{"error": "Failed to create multipart form"})
+            return
+        }
+
+        // 4. Copy the actual file content (the io.Reader) into the part
+        io.Copy(part, file)
+        writer.Close()
 		
 		req, _ := http.NewRequest("POST", "http://file-service:5001/save", body)
 		req.Header.Set("Content-Type", writer.FormDataContentType())
