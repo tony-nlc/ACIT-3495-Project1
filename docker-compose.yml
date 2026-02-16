@@ -31,7 +31,7 @@ services:
       dockerfile: ../Dockerfile
       args:
         SERVICE_NAME: upload-service
-    ports: ["8080:8080"]
+    ports: ["5003:5003"]
     environment:
       - DB_DSN=root:${DB_ROOT_PASSWORD}@tcp(mysql-db:3306)/video_db
     depends_on: [auth-service, file-service, mysql-db]
@@ -42,7 +42,7 @@ services:
       dockerfile: ../Dockerfile
       args:
         SERVICE_NAME: streaming-service
-    ports: ["8081:8081"]
+    ports: ["5002:5002"]
     environment:
       - DB_DSN=root:${DB_ROOT_PASSWORD}@tcp(mysql-db:3306)/video_db
     volumes:
