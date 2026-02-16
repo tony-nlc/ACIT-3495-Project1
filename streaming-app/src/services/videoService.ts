@@ -20,8 +20,9 @@ export async function getVideos(): Promise<Video[]> {
   */
 
   // TEMP mock data
-  return Promise.resolve([
-    { id: 1, title: "Sample Video 1", path: "/videos/sample1.mp4" },
-    { id: 2, title: "Sample Video 2", path: "/videos/sample2.mp4" },
-  ]);
+return Promise.resolve([
+  { id: 1, title: "Sample Video 1", path: "http://localhost:5000/videos/sample1.mp4" },
+  { id: 2, title: "Sample Video 2", path: "http://localhost:5000/videos/sample2.mp4" },
+]);
+
 }

@@ -3,6 +3,7 @@ import { getVideos, type Video } from "../services/videoService";
 
 function Streaming() {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
   useEffect(() => {
     async function fetchVideos() {
@@ -26,9 +27,23 @@ function Streaming() {
       ) : (
         <ul>
           {videos.map((video) => (
-            <li key={video.id}>{video.title}</li>
+            <li key={video.id}>
+              <button onClick={() => setSelectedVideo(video)}>
+                {video.title}
+              </button>
+            </li>
           ))}
         </ul>
+      )}
+
+      {selectedVideo && (
+        <div>
+          <h3>Now Playing: {selectedVideo.title}</h3>
+          <video width="600" controls>
+            <source src={selectedVideo.path} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       )}
     </div>
   );
