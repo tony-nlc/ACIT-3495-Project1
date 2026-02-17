@@ -57,7 +57,7 @@ func main() {
         io.Copy(part, file)
         writer.Close()
 		
-		req, _ := http.NewRequest("POST", "http://file-service:5001/upload", body)
+		req, _ := http.NewRequest("POST", "http://file-service:5001/save", body)
 		req.Header.Set("Content-Type", writer.FormDataContentType())
 		resp, _ := http.DefaultClient.Do(req)
 
