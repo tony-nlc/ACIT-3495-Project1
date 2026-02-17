@@ -68,6 +68,7 @@ func main() {
 		
 		req, _ := http.NewRequest("POST", "http://file-service:5001/save", body)
 		req.Header.Set("Content-Type", writer.FormDataContentType())
+		req.Header.Set("Authorization", token)
 		resp, _ := http.DefaultClient.Do(req)
 
 		if resp.StatusCode == 200 {
