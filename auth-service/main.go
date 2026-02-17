@@ -15,19 +15,21 @@ var jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 func main() {
 	r := gin.Default()
 
-
 	r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, 
+        // Allow your frontend origins (e.g., localhost:3000 for React/Next.js)
+        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173"}, 
         AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true,
     }))
 
-
 	// Login: Issues the token
 	r.POST("/login", func(c *gin.Context) {
-		var login struct{ User, Pass string }
+		var login struct {
+        User string `json:"user"`     // Matches "user" in your curl/frontend
+        Pass string `json:"password"` // Matches "password" in your curl/frontend
+    }
 		c.BindJSON(&login)
 		if login.User == "admin" && login.Pass == "password" {
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{"user": login.User})
