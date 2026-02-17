@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql" 
 	"github.com/golang-jwt/jwt/v5"
@@ -50,6 +51,15 @@ func authMiddleware() gin.HandlerFunc {
 func main() {
 	r := gin.Default()
 	storagePath := "/storage"
+
+	r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, 
+        AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+    }))
+
 
 	r.POST("/upload", authMiddleware(), func(c *gin.Context) {
 		file, err := c.FormFile("video")

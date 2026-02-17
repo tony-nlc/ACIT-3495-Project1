@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"net/http"
 	"os"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,6 +13,14 @@ func main() {
 	db, _ := sql.Open("mysql", os.Getenv("DB_DSN"))
 	r := gin.Default()
 
+	r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, 
+        AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+        ExposeHeaders:    []string{"Content-Length"},
+        AllowCredentials: true,
+    }))
+	
 	r.GET("/getvideos", func(c *gin.Context) {
 		rows, _ := db.Query("SELECT id, title FROM videos")
 		defer rows.Close()
