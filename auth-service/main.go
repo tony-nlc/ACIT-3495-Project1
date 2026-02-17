@@ -27,8 +27,8 @@ func main() {
 	// Login: Issues the token
 	r.POST("/login", func(c *gin.Context) {
 		var login struct {
-        User string `json:"user"`     // Matches "user" in your curl/frontend
-        Pass string `json:"password"` // Matches "password" in your curl/frontend
+        User string `json:"User"`     // Matches "user" in your curl/frontend
+        Pass string `json:"Password"` // Matches "password" in your curl/frontend
     }
 		c.BindJSON(&login)
 		if login.User == "admin" && login.Pass == "password" {
