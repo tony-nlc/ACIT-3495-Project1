@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getVideos, getVideoBlob type Video } from "../services/videoService";
+import { getVideos, getVideoBlob, type Video } from "../services/videoService";
 
 function Streaming() {
   const [videos, setVideos] = useState<Video[]>([]);
