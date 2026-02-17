@@ -20,7 +20,7 @@ func main() {
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true,
     }))
-	
+
 	r.GET("/getvideos", func(c *gin.Context) {
 		rows, _ := db.Query("SELECT id, title FROM videos")
 		defer rows.Close()
@@ -45,9 +45,11 @@ func main() {
 			c.JSON(401, gin.H{"error": "Unauthorized Access"})
 			return
 		}
-
+		
 		var path string
-		db.QueryRow("SELECT path FROM videos WHERE id = ?", c.Param("id")).Scan(&path)
+		db.QueryRow("SELECT file_path FROM videos WHERE id = ?", c.Param("id")).Scan(&path)
+		c.Header("Content-Type", "video/mp4")
+		c.Header("Content-Disposition", "inline")
 		c.File(path)
 	})
 	r.Run(":5002")
