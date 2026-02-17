@@ -25,6 +25,7 @@ services:
       args:
         SERVICE_NAME: file-service
     environment:
+      - DB_DSN=root:${DB_ROOT_PASSWORD}@tcp(mysql-db:3306)/video_db
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     volumes:
       - video_data:/storage
