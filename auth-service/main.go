@@ -17,7 +17,7 @@ func main() {
 
 	r.Use(cors.New(cors.Config{
         // Allow your frontend origins (e.g., localhost:3000 for React/Next.js)
-        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173"}, 
+        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, 
         AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization",  "content-type"},
         ExposeHeaders:    []string{"Content-Length"},

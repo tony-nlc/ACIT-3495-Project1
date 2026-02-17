@@ -61,7 +61,7 @@ func main() {
     }))
 
 
-	r.POST("/upload", authMiddleware(), func(c *gin.Context) {
+	r.POST("/save", authMiddleware(), func(c *gin.Context) {
 		file, err := c.FormFile("video")
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "No file uploaded"})
