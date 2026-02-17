@@ -1,20 +1,15 @@
-import api from "./api";
+import axios from "axios";
 
-interface LoginResponse {
-  token: string;
-}
+const AUTH_BASE = "http://192.168.0.85:5000";
 
 export async function login(username: string, password: string) {
-
-  /*
-  const response = await api.post<LoginResponse>("/login", {
-    username,
-    password,
-  });
+  const response = await axios.post<{ token: string }>(
+    `${AUTH_BASE}/login`,
+    {
+      User: username,
+      Pass: password,
+    }
+  );
 
   return response.data.token;
-  */
-
-  // TEMP: simulate backend
-  return Promise.resolve("fake-jwt-token");
 }

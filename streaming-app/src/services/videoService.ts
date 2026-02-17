@@ -1,4 +1,4 @@
-import api from "./api";
+import { streamingApi } from "./streamingApi";
 
 export interface Video {
   id: number;
@@ -9,20 +9,14 @@ export interface Video {
 export async function getVideos(): Promise<Video[]> {
   const token = localStorage.getItem("token");
 
-  /*
-  const response = await api.get<Video[]>("/videos", {
+  
+  const response = await streamingApi.get<Video[]>("/videos", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   return response.data;
-  */
-
-  // TEMP mock data
-return Promise.resolve([
-  { id: 1, title: "Sample Video 1", path: "http://localhost:5000/videos/sample1.mp4" },
-  { id: 2, title: "Sample Video 2", path: "http://localhost:5000/videos/sample2.mp4" },
-]);
+  
 
 }

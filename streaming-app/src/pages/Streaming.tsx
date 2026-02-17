@@ -40,7 +40,11 @@ function Streaming() {
         <div>
           <h3>Now Playing: {selectedVideo.title}</h3>
           <video width="600" controls>
-            <source src={selectedVideo.path} type="video/mp4" />
+            <source
+              src={`http://192.168.0.85:5002/view/${selectedVideo.id}`}
+              type="video/mp4"
+            />
+
             Your browser does not support the video tag.
           </video>
         </div>
