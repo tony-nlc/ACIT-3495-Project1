@@ -50,6 +50,25 @@ services:
     volumes:
       - video_data:/storage
     depends_on: [auth-service, mysql-db]
+  
+  upload-app:
+    build:
+      context: ./upload-app
+    ports:
+      - "3000:80"
+    depends_on:
+      - auth-service
+      - upload-service
+
+  streaming-app:
+    build:
+      context: ./streaming-app
+    ports:
+      - "3001:80"
+    depends_on:
+      - streaming-service
+
+
 
 volumes:
   video_data:
