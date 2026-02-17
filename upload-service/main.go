@@ -2,18 +2,15 @@ package main
 
 import (
 	"bytes"
-	"database/sql"
 	"io"
 	"mime/multipart"
 	"net/http"
-	"os"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	db, _ := sql.Open("mysql", os.Getenv("DB_DSN"))
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
