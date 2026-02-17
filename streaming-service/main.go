@@ -12,6 +12,19 @@ func main() {
 	db, _ := sql.Open("mysql", os.Getenv("DB_DSN"))
 	r := gin.Default()
 
+	r.GET("/getvideos", func(c *gin.Context) {
+		rows, _ := db.Query("SELECT id, title FROM videos")
+		defer rows.Close()
+		var videos []gin.H
+		for rows.Next() {
+			var id int
+			var title string
+			rows.Scan(&id, &title)
+			videos = append(videos, gin.H{"id": id, "title": title})
+		}
+		c.JSON(200, videos)
+	})
+	
 	r.GET("/view/:id", func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 
