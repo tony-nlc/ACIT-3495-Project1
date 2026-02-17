@@ -3,7 +3,8 @@ import { getVideos, type Video } from "../services/videoService";
 
 function Streaming() {
   const [videos, setVideos] = useState<Video[]>([]);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [videoSrc, setVideoSrc] = useState<string>(""); // Store the Blob URL
+  const [currentTitle, setCurrentTitle] = useState<string>("");
 
   useEffect(() => {
     async function fetchVideos() {
@@ -14,44 +15,42 @@ function Streaming() {
         alert("Failed to load videos");
       }
     }
-
     fetchVideos();
   }, []);
+
+  const handlePlay = async (video: Video) => {
+    try {
+      // If there was a previous video, revoke the old URL to save memory
+      if (videoSrc) URL.revokeObjectURL(videoSrc);
+
+      const url = await getVideoBlob(video.id);
+      setVideoSrc(url);
+      setCurrentTitle(video.title);
+    } catch (error) {
+      alert("Unauthorized or video not found");
+    }
+  };
 
   return (
     <div>
       <h2>Video Streaming Page</h2>
+      <ul>
+        {videos.map((v) => (
+          <li key={v.id}>
+            <button onClick={() => handlePlay(v)}>{v.title}</button>
+          </li>
+        ))}
+      </ul>
 
-      {videos.length === 0 ? (
-        <p>No videos available.</p>
-      ) : (
-        <ul>
-          {videos.map((video) => (
-            <li key={video.id}>
-              <button onClick={() => setSelectedVideo(video)}>
-                {video.title}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {selectedVideo && (
+      {videoSrc && (
         <div>
-          <h3>Now Playing: {selectedVideo.title}</h3>
-          <video width="600" controls>
-            <source
-              src={`http://localhost:5002/view/${selectedVideo.id}`}
-              type="video/mp4"
-            />
-
-
-            Your browser does not support the video tag.
+          <h3>Now Playing: {currentTitle}</h3>
+          {/* Key fix: Use the videoSrc state which contains the authenticated Blob */}
+          <video width="600" controls key={videoSrc}>
+            <source src={videoSrc} type="video/mp4" />
           </video>
         </div>
       )}
     </div>
   );
 }
-
-export default Streaming;

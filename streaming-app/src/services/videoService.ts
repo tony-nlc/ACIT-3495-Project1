@@ -7,17 +7,16 @@ export interface Video {
   title: string;
 }
 
-export async function getVideos(): Promise<Video[]> {
+export async function getVideoBlob(id: number): Promise<string> {
   const token = localStorage.getItem("token");
 
-  const response = await axios.get<Video[]>(
-    `${STREAMING_BASE}/getvideos`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axios.get(`${STREAMING_BASE}/view/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: "blob",
+  });
 
-  return response.data;
+  // Create a local URL for the video data
+  return URL.createObjectURL(response.data);
 }
