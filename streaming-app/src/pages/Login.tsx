@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    // TEMP simulate JWT
-    localStorage.setItem("token", "fake-jwt-token");
+  try {
+    const token = await login(username, password);
 
-    navigate("/stream");
-  };
+    localStorage.setItem("token", token);
+
+    navigate("/upload");
+  } catch (error) {
+    alert("Login failed");
+  }
+};
 
   return (
     <div>
@@ -36,6 +42,7 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+
         <button type="submit">Login</button>
       </form>
     </div>
