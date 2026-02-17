@@ -71,17 +71,19 @@ func main() {
 		// 1. Save file to Disk
 		filePath := fmt.Sprintf("%s/%s", storagePath, file.Filename)
 		if err := c.SaveUploadedFile(file, filePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
-			return
-		}
+    log.Printf("DISK ERROR: %v", err) // <--- Add this
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+    return
+}
 
 		// 2. Save metadata to MySQL
 		query := "INSERT INTO videos (title, file_path) VALUES (?, ?)"
 		_, err = db.Exec(query, file.Filename, filePath)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save metadata to DB"})
-			return
-		}
+    log.Printf("DATABASE ERROR: %v", err) // <--- Add this
+    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save metadata to DB"})
+    return
+}
 
 		c.JSON(http.StatusOK, gin.H{"message": "File and Metadata saved successfully"})
 	})
