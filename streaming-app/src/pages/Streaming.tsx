@@ -41,7 +41,7 @@ function Streaming() {
           <h3>Now Playing: {selectedVideo.title}</h3>
           <video width="600" controls>
             <source
-              src={`http://192.168.0.85:5002/view/${selectedVideo.id}`}
+              src={`http://localhost:5002/view/${selectedVideo.id}`}
               type="video/mp4"
             />
 
