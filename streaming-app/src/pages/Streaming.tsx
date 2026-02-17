@@ -54,3 +54,5 @@ function Streaming() {
     </div>
   );
 }
+
+export default Streaming
