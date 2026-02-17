@@ -24,6 +24,8 @@ services:
       dockerfile: ../Dockerfile
       args:
         SERVICE_NAME: file-service
+    environment:
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     volumes:
       - video_data:/storage
 
@@ -34,8 +36,10 @@ services:
       args:
         SERVICE_NAME: upload-service
     ports: ["5003:5003"]
+    
     environment:
       - DB_DSN=root:${DB_ROOT_PASSWORD}@tcp(mysql-db:3306)/video_db
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     depends_on: [auth-service, file-service, mysql-db]
 
   streaming-service:
@@ -47,6 +51,7 @@ services:
     ports: ["5002:5002"]
     environment:
       - DB_DSN=root:${DB_ROOT_PASSWORD}@tcp(mysql-db:3306)/video_db
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     volumes:
       - video_data:/storage
     depends_on: [auth-service, mysql-db]
