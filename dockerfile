@@ -1,5 +1,5 @@
 # 1. Build Stage
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25.1-alpine AS builder
 
 # Required for fetching Go modules over HTTPS/Git
 RUN apk add --no-cache git ca-certificates
