@@ -16,8 +16,7 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-        // Allow your frontend origins (e.g., localhost:3000 for React/Next.js)
-        AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"}, 
+        AllowAllOrigins:  true, 
         AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization",  "content-type"},
         ExposeHeaders:    []string{"Content-Length"},
