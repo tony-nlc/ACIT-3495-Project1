@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const STREAMING_BASE = "http://localhost:5002";
+const STREAMING_BASE = `http://${window.location.hostname}:5002`;
 
 export interface Video {
   id: number;
