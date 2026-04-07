@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streaming-app
+  namespace: video-streaming
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: streaming-app
+  template:
+    metadata:
+      labels:
+        app: streaming-app
+    spec:
+      containers:
+      - name: streaming-app
+        image: streaming-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: REACT_APP_AUTH_SERVICE_URL
+          value: "http://auth-service:5000"
+        - name: REACT_APP_STREAMING_SERVICE_URL
+          value: "http://streaming-service:5002"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: streaming-app
+  namespace: video-streaming
+spec:
+  type: ClusterIP
+  selector:
+    app: streaming-app
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http

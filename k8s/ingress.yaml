@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: video-streaming-ingress
+  namespace: video-streaming
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: video-streaming.local
+    http:
+      paths:
+      # Frontend apps
+      - path: /upload
+        pathType: Prefix
+        backend:
+          service:
+            name: upload-app
+            port:
+              number: 80
+      - path: /streaming
+        pathType: Prefix
+        backend:
+          service:
+            name: streaming-app
+            port:
+              number: 80
+      # Backend APIs
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 5000
+      - path: /api/upload
+        pathType: Prefix
+        backend:
+          service:
+            name: upload-service
+            port:
+              number: 5003
+      - path: /api/streaming
+        pathType: Prefix
+        backend:
+          service:
+            name: streaming-service
+            port:
+              number: 5002
+      - path: /api/file
+        pathType: Prefix
+        backend:
+          service:
+            name: file-service
+            port:
+              number: 5001

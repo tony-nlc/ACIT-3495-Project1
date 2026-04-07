@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upload-app
+  namespace: video-streaming
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: upload-app
+  template:
+    metadata:
+      labels:
+        app: upload-app
+    spec:
+      containers:
+      - name: upload-app
+        image: upload-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: REACT_APP_AUTH_SERVICE_URL
+          value: "http://auth-service:5000"
+        - name: REACT_APP_UPLOAD_SERVICE_URL
+          value: "http://upload-service:5003"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upload-app
+  namespace: video-streaming
+spec:
+  type: ClusterIP
+  selector:
+    app: upload-app
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http

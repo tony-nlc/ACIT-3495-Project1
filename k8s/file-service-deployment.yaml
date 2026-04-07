@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-service
+  namespace: video-streaming
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: file-service
+  template:
+    metadata:
+      labels:
+        app: file-service
+    spec:
+      containers:
+      - name: file-service
+        image: file-service:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+        env:
+        - name: DB_DSN
+          value: "video_user:video_pass@tcp(mysql-service:3306)/video_db"
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: JWT_SECRET_KEY
+        - name: PORT
+          value: "5001"
+        volumeMounts:
+        - name: video-storage
+          mountPath: /storage
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: video-storage
+        persistentVolumeClaim:
+          claimName: video-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-service
+  namespace: video-streaming
+spec:
+  type: ClusterIP
+  selector:
+    app: file-service
+  ports:
+  - port: 5001
+    targetPort: 5001
+    name: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: video-pvc
+  namespace: video-streaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi

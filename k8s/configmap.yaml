@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: video-streaming
+data:
+  DB_HOST: "mysql-service"
+  DB_PORT: "3306"
+  DB_NAME: "video_db"
+  AUTH_SERVICE_URL: "http://auth-service:5000"
+  FILE_SERVICE_URL: "http://file-service:5001"
+  # Frontend app URLs for CORS (if needed)
+  REACT_APP_AUTH_SERVICE_URL: "http://auth-service:5000"
+  REACT_APP_UPLOAD_SERVICE_URL: "http://upload-service:5003"
+  REACT_APP_STREAMING_SERVICE_URL: "http://streaming-service:5002"
